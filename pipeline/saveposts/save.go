@@ -1,6 +1,8 @@
 package saveposts
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbattribute"
@@ -22,8 +24,14 @@ func (p *PostSaver) SavePosts(posts []domain.Post) error {
 		req := p.PutItemRequest(&dynamodb.PutItemInput{
 			TableName: aws.String(p.TableName),
 			Item:      avm,
+			
 		})
-		req.Send()
+		out, err := req.Send()
+		if err != nil {
+			fmt.Println(err.Error())
+		} else {
+			fmt.Println(out.GoString())
+		}
 	}
 	return nil
 }

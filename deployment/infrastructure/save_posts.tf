@@ -5,6 +5,14 @@ data aws_iam_policy_document "save_posts" {
     resources = ["${module.posts-dynamodb-table.arn}",
     ]
   }
+
+  statement {
+    actions = ["s3:*"]
+
+    resources = ["arn:aws:s3:::static.beeceej.com/*",
+      "arn:aws:s3:::beeceej-pipelines/*",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "save_posts" {
@@ -27,6 +35,6 @@ module "save_posts" {
     "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
     "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
     "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
-    "POST_TABLE_NAME" = "${local.table_name}"
+    "POSTS_TABLE_NAME" = "${local.table_name}"
   }
 }
