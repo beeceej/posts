@@ -1,0 +1,25 @@
+{
+  "Comment": "State Machine for a markdown based blog post pipeline",
+  "StartAt": "convert_posts_to_json",
+  "States": {
+    "convert_posts_to_json": {
+      "Type": "Task",
+      "Resource": "${convert_posts_to_json}",
+      "Next": "save_posts",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "save_posts",
+          "ResultPath": "$.error"
+        }
+      ]
+    },
+    "save_posts": {
+      "Type": "Task",
+      "Resource": "${save_posts}",
+      "End": true
+    }
+  }
+}
