@@ -3,10 +3,9 @@ package upload
 import (
 	"encoding/json"
 
-	"github.com/beeceej/posts/pipeline/shared/domain"
+	"github.com/beeceej/posts/pipeline/shared/post"
 
-	"github.com/beeceej/posts/pipeline/shared/inflight"
-	"github.com/beeceej/posts/pipeline/shared/state"
+	"github.com/beeceej/inflight"
 )
 
 // Handler is the entrypoint into the posts-to-json service layer logic
@@ -16,13 +15,13 @@ type Handler struct {
 }
 
 // Handle is
-func (h Handler) Handle(ref state.InflightRef) error {
+func (h Handler) Handle(ref inflight.Ref) error {
 	b, err := h.Inflight.Get(ref.Object)
 	if err != nil {
 		return err
 	}
 
-	posts := new(domain.PostIndex)
+	posts := new(post.PostIndex)
 	if err = json.Unmarshal(b, &posts.Posts); err != nil {
 		return err
 	}

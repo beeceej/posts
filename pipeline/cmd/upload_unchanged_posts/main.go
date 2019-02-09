@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3iface"
-	"github.com/beeceej/posts/pipeline/shared/inflight"
+	"github.com/beeceej/inflight"
 	"github.com/beeceej/posts/pipeline/upload"
 )
 
@@ -35,8 +35,8 @@ func init() {
 	}
 	handler = &upload.Handler{
 		Inflight: inflight.NewInflight(
-			inflightBucketName,
-			pipelineSubPath,
+			inflight.Bucket(inflightBucketName),
+			inflight.KeyPath(pipelineSubPath),
 			s3svc),
 		Uploader: &upload.Uploader{
 			S3API: s3svc,

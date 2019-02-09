@@ -10,29 +10,29 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3iface"
-	"github.com/beeceej/posts/pipeline/shared/domain"
+	"github.com/beeceej/posts/pipeline/shared/post"
 )
 
 type Uploader struct {
 	s3iface.S3API
 }
 
-func (u Uploader) Upload(postIndex *domain.PostIndex) error {
+func (u Uploader) Upload(postIndex *post.PostIndex) error {
 	var (
 		b                     []byte
-		existingPublishedPost *domain.Post
+		existingPublishedPost *post.Post
 	)
 
-	for _, post := range postIndex.Posts {
+	for _, p := range postIndex.Posts {
 		getObjReq := u.S3API.GetObjectRequest(
 			&s3.GetObjectInput{
 				Bucket: aws.String("static.beeceej.com"),
-				Key:    aws.String(filepath.Join("posts", post.NormalizedTitle) + ".json"),
+				Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
 			},
 		)
 		a, err := getObjReq.Send()
 		if err != nil {
-			fmt.Println(post.NormalizedTitle, err.Error())
+			fmt.Println(p.NormalizedTitle, err.Error())
 		} else {
 			defer a.Body.Close()
 			b, err = ioutil.ReadAll(a.Body)
@@ -40,24 +40,24 @@ func (u Uploader) Upload(postIndex *domain.PostIndex) error {
 				return err
 			}
 
-			existingPublishedPost := new(domain.Post)
+			existingPublishedPost := new(post.Post)
 			existingPublishedPost.FromBytes(b)
 		}
 		if existingPublishedPost != nil {
-			fmt.Println("existingPublishedPost.MD5", existingPublishedPost.MD5, " post.MD5", post.MD5)
-			if existingPublishedPost.MD5 != post.MD5 {
+			fmt.Println("existingPublishedPost.MD5", existingPublishedPost.MD5, " post.MD5", p.MD5)
+			if existingPublishedPost.MD5 != p.MD5 {
 				putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
 					Bucket: aws.String("static.beeceej.com"),
-					Key:    aws.String(filepath.Join("posts", post.NormalizedTitle) + ".json"),
-					Body:   bytes.NewReader(post.ToBytes()),
+					Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
+					Body:   bytes.NewReader(p.ToBytes()),
 				})
 				putObjReq.Send()
 			}
 		} else {
 			putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
 				Bucket: aws.String("static.beeceej.com"),
-				Key:    aws.String(filepath.Join("posts", post.NormalizedTitle) + ".json"),
-				Body:   bytes.NewReader(post.ToBytes()),
+				Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
+				Body:   bytes.NewReader(p.ToBytes()),
 			})
 			putObjReq.Send()
 		}

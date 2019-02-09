@@ -1,12 +1,8 @@
-package domain
+package post
 
 import (
 	"encoding/json"
-	"regexp"
 )
-
-var titleblackList = regexp.MustCompile(`[ #$%&@/:;<=>?[\]^{|}~“‘+,]`)
-var catchDoubleDash = regexp.MustCompile(`-(-)+`)
 
 // Post represents the model of a post, for example:
 // {

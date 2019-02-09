@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3iface"
+	"github.com/beeceej/inflight"
 	"github.com/beeceej/posts/pipeline/poststojson"
-	"github.com/beeceej/posts/pipeline/shared/inflight"
 )
 
 var (
@@ -34,13 +34,13 @@ func init() {
 	if pipelineSubPath == "" {
 		panic("Missing env var PIPELINE_SUB_PATH")
 	}
+
 	handler = &poststojson.Handler{
 		S3API: s3svc,
-		Inflight: &inflight.Inflight{
-			S3API:   s3svc,
-			Bucket:  inflightBucketName,
-			KeyPath: pipelineSubPath,
-		},
+		Inflight: inflight.NewInflight(
+			inflight.Bucket(inflightBucketName),
+			inflight.KeyPath(pipelineSubPath),
+			s3svc),
 		PostsRepositoryURL: postsRepositoryURL,
 	}
 }
