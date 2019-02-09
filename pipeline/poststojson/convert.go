@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/beeceej/posts/pipeline/shared/domain"
+	"github.com/beeceej/posts/pipeline/shared/post"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
@@ -32,7 +32,7 @@ var (
 )
 
 type postConverter struct {
-	posts []*domain.Post
+	posts []*post.Post
 }
 
 func (p *postConverter) convert(f *object.File) error {
@@ -50,7 +50,7 @@ func (p *postConverter) convert(f *object.File) error {
 	return nil
 }
 
-func toPost(md string) (post *domain.Post) {
+func toPost(md string) (post *post.Post) {
 	post = captureMeta(md)
 	post.Body = removeCommentsRegex.ReplaceAllString(md, "")
 	return post
@@ -67,7 +67,7 @@ func getmd5(s string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
 }
 
-func captureMeta(md string) *domain.Post {
+func captureMeta(md string) *post.Post {
 	matches := captureMetaRegex.FindAllStringSubmatch(md, -1)
 
 	id := strings.TrimSpace(matches[indexID][indexVal])
@@ -84,7 +84,7 @@ func captureMeta(md string) *domain.Post {
 		isVisible = false
 	}
 
-	return &domain.Post{
+	return &post.Post{
 		ID:              id,
 		Title:           title,
 		NormalizedTitle: normalizedTitle,

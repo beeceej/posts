@@ -3,14 +3,16 @@ package main
 import (
 	"os"
 
+	"github.com/beeceej/posts/pipeline/shared/post"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3iface"
+	"github.com/beeceej/inflight"
 	"github.com/beeceej/posts/pipeline/saveposts"
-	"github.com/beeceej/posts/pipeline/shared/inflight"
 )
 
 var (
@@ -40,10 +42,10 @@ func init() {
 	}
 	handler = &saveposts.Handler{
 		Inflight: inflight.NewInflight(
-			inflightBucketName,
-			pipelineSubPath,
+			inflight.Bucket(inflightBucketName),
+			inflight.KeyPath(pipelineSubPath),
 			s3svc),
-		Saver: &saveposts.PostSaver{
+		PostWriter: &post.PostDynamoRepository{
 			DynamoDBAPI: dynamosvc,
 			TableName:   postTableName,
 		},

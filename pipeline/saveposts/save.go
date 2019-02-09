@@ -1,37 +1,14 @@
 package saveposts
 
 import (
-	"fmt"
-
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbattribute"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbiface"
-	"github.com/beeceej/posts/pipeline/shared/domain"
+	"github.com/beeceej/posts/pipeline/shared/post"
 )
 
 type PostSaver struct {
-	dynamodbiface.DynamoDBAPI
+	post.PostWriter
 	TableName string
 }
 
-func (p *PostSaver) SavePosts(posts []domain.Post) error {
-	for _, post := range posts {
-		avm, err := dynamodbattribute.MarshalMap(post)
-		if err != nil {
-			return err
-		}
-		req := p.PutItemRequest(&dynamodb.PutItemInput{
-			TableName: aws.String(p.TableName),
-			Item:      avm,
-			
-		})
-		out, err := req.Send()
-		if err != nil {
-			fmt.Println(err.Error())
-		} else {
-			fmt.Println(out.GoString())
-		}
-	}
-	return nil
+func (p *PostSaver) SavePosts(posts []post.Post) error {
+	return p.PostWriter.Write(posts)
 }

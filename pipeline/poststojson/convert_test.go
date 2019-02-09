@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/beeceej/posts/pipeline/shared/domain"
+	"github.com/beeceej/posts/pipeline/shared/post"
 )
 
 func TestConvert(t *testing.T) {
@@ -32,7 +32,7 @@ it has a free tier and it's incredibly easy to stand up a table withour worrying
 	}
 }
 
-func loadPost(fpath string) (p *domain.Post) {
+func loadPost(fpath string) (p *post.Post) {
 	f, _ := os.Open(fpath)
 
 	jdecode := json.NewDecoder(f)
