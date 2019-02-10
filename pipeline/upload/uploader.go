@@ -74,7 +74,22 @@ func (u Uploader) UploadSiteMap(postIndex *post.PostIndex) error {
 	var (
 		b []byte
 	)
-	b, _ = json.Marshal(postIndex)
+	var index *post.PostIndex
+	for _, p := range postIndex.Posts {
+		index.Posts = append(index.Posts, post.Post{
+			ID:              p.ID,
+			Title:           p.Title,
+			NormalizedTitle: p.NormalizedTitle,
+			Author:          p.Author,
+			PostedAt:        p.PostedAt,
+			UpdatedAt:       p.UpdatedAt,
+			Visible:         p.Visible,
+			MD5:             p.MD5,
+			Blurb:           p.Body[0:100],
+		})
+	}
+
+	b, _ = json.Marshal(index)
 	putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
 		Bucket:      aws.String("static.beeceej.com"),
 		Key:         aws.String("posts/all.json"),
