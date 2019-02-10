@@ -3,8 +3,6 @@ package main
 import (
 	"os"
 
-	"github.com/beeceej/posts/pipeline/shared/post"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -13,16 +11,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3iface"
 	"github.com/beeceej/inflight"
 	"github.com/beeceej/posts/pipeline/saveposts"
+	"github.com/beeceej/posts/pipeline/shared/post"
 )
 
-var (
-	s3svc   s3iface.S3API
-	cfg     aws.Config
-	handler *saveposts.Handler
-	err     error
-)
+func main() {
+	var (
+		s3svc   s3iface.S3API
+		cfg     aws.Config
+		handler *saveposts.Handler
+		err     error
+	)
 
-func init() {
 	if cfg, err = external.LoadDefaultAWSConfig(); err != nil {
 		panic(err.Error())
 	}
@@ -50,8 +49,5 @@ func init() {
 			TableName:   postTableName,
 		},
 	}
-}
-
-func main() {
 	lambda.Start(handler.Handle)
 }

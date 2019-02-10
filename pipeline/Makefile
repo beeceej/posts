@@ -6,3 +6,5 @@ build:
 	zip ../bin/upload_unchanged_posts.zip ../bin/upload_unchanged_posts
 	env GOOS=linux go build -ldflags="-s -w" -o ../bin/save_posts cmd/save_posts/main.go
 	zip ../bin/save_posts.zip ../bin/save_posts
+	env GOOS=linux go build -ldflags="-s -w" -o ../bin/update_site_map cmd/update_site_map/main.go
+	zip ../bin/update_site_map.zip ../bin/update_site_map

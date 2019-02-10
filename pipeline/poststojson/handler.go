@@ -14,8 +14,9 @@ import (
 // Handler is the entrypoint into the posts-to-json service layer logic
 type Handler struct {
 	s3iface.S3API
-	PostsRepositoryURL string
-	Inflight           *inflight.Inflight
+	PostConverter         *PostConverter
+	PostsGitRepositoryURL string
+	Inflight              *inflight.Inflight
 }
 
 // Handle will clone the contents of the git repository into memory
@@ -24,7 +25,7 @@ type Handler struct {
 func (h *Handler) Handle(event interface{}) (*inflight.Ref, error) {
 	fmt.Println("Handle Begin")
 	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
-		URL: h.PostsRepositoryURL,
+		URL: h.PostsGitRepositoryURL,
 	})
 	if err != nil {
 		return nil, err
@@ -51,15 +52,9 @@ func (h *Handler) Handle(event interface{}) (*inflight.Ref, error) {
 		return nil, err
 	}
 
-	converter := new(postConverter)
+	postTree.Files().ForEach(h.PostConverter.convert)
 
-	if err != nil {
-		return nil, err
-	}
-
-	postTree.Files().ForEach(converter.convert)
-
-	b, err := json.Marshal(converter.posts)
+	b, err := json.Marshal(h.PostConverter.posts)
 	if err != nil {
 		return nil, err
 	}
