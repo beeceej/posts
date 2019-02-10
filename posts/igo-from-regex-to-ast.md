@@ -1,8 +1,6 @@
 <!--id: 7-->
 <!--title: Writing a Go Interpreter in Go, pt2 -->
 <!--author: Brian Jones-->
-<!--postedAt: December 7th, 2018-->
-<!--updatedAt: December 7th, 2018-->
 <!--visible: true-->
 
 This is part 2 in a mini series about writing an interpreter in Go. The first post can be found here [here](https://blog.beeceej.com/blog/4).

@@ -1,8 +1,6 @@
 <!--id: 4-->
 <!--title: Writing a Go interpreter in Go -->
 <!--author: Brian Jones-->
-<!--postedAt: August 7th, 2018-->
-<!--updatedAt: August 12th, 2018-->
 <!--visible: true-->
 
 ## Why Interpreters
