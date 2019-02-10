@@ -15,15 +15,40 @@ type Handler struct {
 }
 
 // Handle is
-func (h Handler) Handle(ref inflight.Ref) error {
+func (h Handler) Handle(ref inflight.Ref) (*inflight.Ref, error) {
 	b, err := h.Inflight.Get(ref.Object)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	postIndex := &post.PostIndex{
+		Posts: []post.Post{},
 	}
 
-	posts := new(post.PostIndex)
-	if err = json.Unmarshal(b, &posts.Posts); err != nil {
-		return err
+	if err = json.Unmarshal(b, &postIndex.Posts); err != nil {
+		return nil, err
 	}
-	return h.Uploader.Upload(posts)
+	if err = h.Uploader.Upload(postIndex); err != nil {
+		return nil, err
+	}
+	return h.Inflight.Write(b)
+
+}
+
+// HandleSiteMap is
+func (h Handler) HandleSiteMap(ref inflight.Ref) (*inflight.Ref, error) {
+	b, err := h.Inflight.Get(ref.Object)
+	if err != nil {
+		return nil, err
+	}
+	postIndex := &post.PostIndex{
+		Posts: []post.Post{},
+	}
+
+	if err = json.Unmarshal(b, &postIndex.Posts); err != nil {
+		return nil, err
+	}
+	if err = h.Uploader.UploadSiteMap(postIndex); err != nil {
+		return nil, err
+	}
+	return h.Inflight.Write(b)
 }

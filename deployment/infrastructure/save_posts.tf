@@ -2,8 +2,7 @@ data aws_iam_policy_document "save_posts" {
   statement {
     actions = ["dynamodb:*"]
 
-    resources = ["${module.posts-dynamodb-table.arn}",
-    ]
+    resources = ["${module.posts-dynamodb-table.arn}"]
   }
 
   statement {
@@ -35,6 +34,6 @@ module "save_posts" {
     "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
     "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
     "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
-    "POSTS_TABLE_NAME" = "${local.table_name}"
+    "POSTS_TABLE_NAME"     = "${local.table_name}"
   }
 }

@@ -5,6 +5,10 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+}
+
 locals {
   state_machine_name = "blog-post-pipeline"
 }
@@ -14,8 +18,9 @@ data "template_file" "state_machine_definition" {
 
   vars {
     convert_posts_to_json  = "${module.convert_posts_to_json.lambda_arn}"
+    save_posts             = "${module.save_posts.lambda_arn}"
     upload_unchanged_posts = "${module.upload_unchanged_posts.lambda_arn}"
-    save_posts = "${module.save_posts.lambda_arn}"
+    update_site_map = "${module.update_site_map.lambda_arn}"
   }
 }
 

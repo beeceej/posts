@@ -6,19 +6,20 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/beeceej/posts/pipeline/shared/post"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
 
 const (
-	indexVal         = 4
-	indexID          = 0
-	indexTitle       = 1
-	indexAuthor      = 2
-	indexPostedAt    = 3
-	indexUpdatedLast = 4
-	indexVisible     = 5
+	indexVal             = 4
+	indexID              = 0
+	indexTitle           = 1
+	indexAuthor          = 2
+	indexPostedAtUnused  = 3 // If we remove these keys from the MD files the hashes will change unnecessarily
+	indexUpdatedAtUnused = 4 // If we remove these keys from the MD files the hashes will change unnecessarily
+	indexVisible         = 5
 )
 
 var (
@@ -31,11 +32,13 @@ var (
 	catchDoubleDash = regexp.MustCompile(`-(-)+`)
 )
 
-type postConverter struct {
+// PostConverter handles extracting meta data from the markdown documents
+type PostConverter struct {
+	post.PostGetter
 	posts []*post.Post
 }
 
-func (p *postConverter) convert(f *object.File) error {
+func (p *PostConverter) convert(f *object.File) error {
 	var (
 		md  string
 		err error
@@ -45,13 +48,18 @@ func (p *postConverter) convert(f *object.File) error {
 		return err
 	}
 
-	p.posts = append(p.posts, toPost(md))
+	p.posts = append(p.posts, p.toPost(md))
 
 	return nil
 }
 
-func toPost(md string) (post *post.Post) {
-	post = captureMeta(md)
+func (p *PostConverter) toPost(md string) (post *post.Post) {
+	var err error
+	post, err = p.captureMeta(md)
+	if err != nil {
+		fmt.Println("Unable to capture meta data for", md)
+		panic(err.Error())
+	}
 	post.Body = removeCommentsRegex.ReplaceAllString(md, "")
 	return post
 }
@@ -67,21 +75,40 @@ func getmd5(s string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
 }
 
-func captureMeta(md string) *post.Post {
+func (p *PostConverter) captureMeta(md string) (*post.Post, error) {
 	matches := captureMetaRegex.FindAllStringSubmatch(md, -1)
 
 	id := strings.TrimSpace(matches[indexID][indexVal])
 	title := strings.TrimSpace(matches[indexTitle][indexVal])
 	normalizedTitle := normalizeTitle(title)
 	author := strings.TrimSpace(matches[indexAuthor][indexVal])
-	postedAt := strings.TrimSpace(matches[indexPostedAt][indexVal])
-	updatedLast := strings.TrimSpace(matches[indexUpdatedLast][indexVal])
 	visible := strings.TrimSpace(matches[indexVisible][indexVal])
 	isVisible, err := strconv.ParseBool(visible)
+	md5hash := getmd5(md)
 
 	if err != nil {
 		fmt.Println("Couldn't parse value for isVisible, defaulting to false")
 		isVisible = false
+	}
+
+	existingPost, err := p.PostGetter.Get(id, md5hash)
+	if err != nil {
+		return nil, err
+	}
+
+	var (
+		postedAt    time.Time
+		updatedLast time.Time
+	)
+
+	if existingPost == nil { // If it's nil, it didn't exist before
+		postedAt = time.Now().UTC()
+		updatedLast = time.Now().UTC()
+	} else if existingPost.MD5 != md5hash { // Only update it if the hash has changed
+		updatedLast = time.Now().UTC()
+	} else {
+		postedAt = existingPost.PostedAt
+		updatedLast = existingPost.UpdatedAt
 	}
 
 	return &post.Post{
@@ -92,6 +119,6 @@ func captureMeta(md string) *post.Post {
 		PostedAt:        postedAt,
 		UpdatedAt:       updatedLast,
 		Visible:         isVisible,
-		MD5:             getmd5(md),
-	}
+		MD5:             md5hash,
+	}, nil
 }

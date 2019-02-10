@@ -19,6 +19,16 @@
     "save_posts": {
       "Type": "Task",
       "Resource": "${save_posts}",
+      "Next": "upload_unchanged_posts"
+    },
+    "upload_unchanged_posts": {
+      "Type": "Task",
+      "Resource": "${upload_unchanged_posts}",
+      "Next": "update_site_map"
+    },
+    "update_site_map": {
+      "Type": "Task",
+      "Resource": "${update_site_map}",
       "End": true
     }
   }

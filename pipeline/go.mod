@@ -1,10 +1,9 @@
-module github.com/beeceej/pipline
+module github.com/beeceej/posts/pipeline
 
 require (
 	github.com/aws/aws-lambda-go v1.8.2
 	github.com/aws/aws-sdk-go-v2 v0.7.0
 	github.com/beeceej/inflight v1.0.0
-	github.com/beeceej/posts v0.0.0-20190209184403-77bab6d6108a
 	github.com/cenkalti/backoff v2.1.1+incompatible
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

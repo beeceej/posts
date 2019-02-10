@@ -42,5 +42,5 @@ func main() {
 		},
 	}
 
-	lambda.Start(handler.Handle)
+	lambda.Start(handler.HandleSiteMap)
 }

@@ -1,8 +1,6 @@
 <!--id: 6-->
-<!--title: Dynamo DB Data Migrations -->
+<!--title: Dynamo DB Data Migrations-->
 <!--author: Brian Jones-->
-<!--postedAt: October 22nd, 2018-->
-<!--updatedAt: October 22nd, 2018-->
 <!--visible: true-->
 
 Over the past month or so I've had the pleasure of working on a huge data migration on a live, customer facing application. We had chosen a primary key that a large part of our infrastructure depended upon; unfortunately for us, that key was no longer primary. Quick deadlines and changing requirements put us into a position where we needed to overhaul the identifier across all services. As dead lines loomed, we knew we had to do it quickly, safely, and accurately. To make this change as seamless as possible we needed to perform the migration:

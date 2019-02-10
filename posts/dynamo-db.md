@@ -1,8 +1,6 @@
 <!--id: 2-->
 <!--title: Dynamo DB and Elastic Search! -->
 <!--author: Brian Jones-->
-<!--postedAt: July 23rd, 2018-->
-<!--updatedAt: August 7th, 2018-->
 <!--visible: false-->
 
 # [DynamoDB](https://aws.amazon.com/dynamodb/) Is Awesome!

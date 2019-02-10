@@ -1,8 +1,6 @@
 <!--id: 3-->
 <!--title: Give it a Try! -->
 <!--author: Brian Jones-->
-<!--postedAt: July 23rd, 2018-->
-<!--updatedAt: August 7th, 2018-->
 <!--visible: true-->
 
 5 years ago if you told me i'd be hacking in LISP, I would have told you, \"You're crazy\". I've heard too many people talk about how bad it is. Most arguments revolving around functional programming not being practical. Or about all of the parentheses (_**How do you even match those up?!?!**_). I agree functional programming can seem relatively opaque, especially if that person is schooled in OOP languages, or the only exposure to functional programming emphasizes on theory, as opposed to practical application. But, it is extremely short sighted to disregard a language on syntax alone. We should spend half the time on learning the theory, and half the time on practical applications. If we didn't hold misconceptions about languages and features maybe we'd all be further along? Maybe we'd stop arguing about inconsequential matters.

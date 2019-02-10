@@ -2,6 +2,7 @@ package upload
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -20,7 +21,7 @@ type Uploader struct {
 func (u Uploader) Upload(postIndex *post.PostIndex) error {
 	var (
 		b                     []byte
-		existingPublishedPost *post.Post
+		existingPublishedPost post.Post
 	)
 
 	for _, p := range postIndex.Posts {
@@ -39,30 +40,47 @@ func (u Uploader) Upload(postIndex *post.PostIndex) error {
 			if err != nil {
 				return err
 			}
-
-			existingPublishedPost := new(post.Post)
-			existingPublishedPost.FromBytes(b)
-		}
-		if existingPublishedPost != nil {
-			fmt.Println("existingPublishedPost.MD5", existingPublishedPost.MD5, " post.MD5", p.MD5)
-			if existingPublishedPost.MD5 != p.MD5 {
-				putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
-					Bucket: aws.String("static.beeceej.com"),
-					Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
-					Body:   bytes.NewReader(p.ToBytes()),
-				})
-				putObjReq.Send()
+			if err := json.Unmarshal(b, &existingPublishedPost); err != nil {
+				panic(err.Error())
 			}
+		}
+		postPublishedBefore := &existingPublishedPost != nil
+		hasMD5Changed := postPublishedBefore && existingPublishedPost.MD5 != p.MD5
+		if postPublishedBefore && hasMD5Changed {
+			fmt.Println("existingPublishedPost.MD5", existingPublishedPost.MD5, " post.MD5", p.MD5)
+			putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
+				Bucket:      aws.String("static.beeceej.com"),
+				Key:         aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
+				Body:        bytes.NewReader(p.ToBytes()),
+				ContentType: aws.String("application/json"),
+			})
+			putObjReq.Send()
 		} else {
 			putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
-				Bucket: aws.String("static.beeceej.com"),
-				Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
-				Body:   bytes.NewReader(p.ToBytes()),
+				Bucket:      aws.String("static.beeceej.com"),
+				Key:         aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
+				Body:        bytes.NewReader(p.ToBytes()),
+				ContentType: aws.String("application/json"),
 			})
 			putObjReq.Send()
 		}
-
 	}
 
+	return nil
+}
+
+// UploadSiteMap is
+func (u Uploader) UploadSiteMap(postIndex *post.PostIndex) error {
+	var (
+		b []byte
+	)
+	b, _ = json.Marshal(postIndex)
+	putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
+		Bucket:      aws.String("static.beeceej.com"),
+		Key:         aws.String("posts/all.json"),
+		Body:        bytes.NewReader(b),
+		ContentType: aws.String("application/json"),
+	})
+	putObjReq.Send()
 	return nil
 }
