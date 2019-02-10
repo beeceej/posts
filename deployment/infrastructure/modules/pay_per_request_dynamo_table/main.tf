@@ -3,19 +3,19 @@ variable "table_name" {
 }
 
 variable "hash_key" {
-description = "The hash key of the table"
+  description = "The hash key of the table"
 }
 
 variable "hash_key_type" {
-description = "The type of the hash key"
+  description = "The type of the hash key"
 }
 
 variable "range_key" {
-description = "The range key of the table"
+  description = "The range key of the table"
 }
 
 variable "range_key_type" {
-description = "The type of the range key"
+  description = "The type of the range key"
 }
 
 resource "aws_dynamodb_table" "pay-per-request-dynamodb-table" {

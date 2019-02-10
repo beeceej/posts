@@ -1,4 +1,4 @@
-data aws_iam_policy_document "upload_unchanged_posts" {
+data aws_iam_policy_document "update_site_map" {
   statement {
     actions = ["s3:*"]
 
@@ -11,17 +11,17 @@ data aws_iam_policy_document "upload_unchanged_posts" {
   }
 }
 
-resource "aws_iam_role_policy" "upload_unchanged_posts" {
-  name   = "upload_unchanged_posts-policy-attachment"
-  role   = "${module.upload_unchanged_posts.lambda_role_name}"
-  policy = "${data.aws_iam_policy_document.upload_unchanged_posts.json}"
+resource "aws_iam_role_policy" "update_site_map" {
+  name   = "update_site_map-policy-attachment"
+  role   = "${module.update_site_map.lambda_role_name}"
+  policy = "${data.aws_iam_policy_document.update_site_map.json}"
 }
 
-module "upload_unchanged_posts" {
+module "update_site_map" {
   source        = "./modules/go_lambda"
-  function_name = "${local.state_machine_name}-upload_unchanged_posts"
-  handler       = "/bin/upload_unchanged_posts"
-  file_name     = "../../bin/upload_unchanged_posts.zip"
+  function_name = "${local.state_machine_name}-update_site_map"
+  handler       = "/bin/update_site_map"
+  file_name     = "../../bin/update_site_map.zip"
   memory_size   = "512"
   timeout       = "60"
 

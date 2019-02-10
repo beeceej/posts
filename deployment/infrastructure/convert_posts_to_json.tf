@@ -1,10 +1,27 @@
 data aws_iam_policy_document "convert_posts_to_json" {
   statement {
     actions = ["s3:*"]
+    effect  = "Allow"
 
     resources = ["arn:aws:s3:::beeceej-pipelines/*",
       "arn:aws:s3:::static.beeceej.com/*",
     ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:BatchGetItem",
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:DescribeReservedCapacity",
+      "dynamodb:DescribeReservedCapacityOfferings",
+      "dynamodb:GetRecords",
+    ]
+
+    resources = ["arn:aws:dynamodb:us-east-1:850054059454:table/blog-posts"]
   }
 }
 
@@ -24,9 +41,9 @@ module "convert_posts_to_json" {
 
   environment_vars = {
     "BUCKET_NAME"          = "static.beeceej.com"
-    "POSTS_REPO_URL"       = "https://github.com/beeceej/posts"
     "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
     "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
     "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
+    "POSTS_TABLE_NAME"     = "${local.table_name}"
   }
 }
