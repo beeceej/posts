@@ -3,7 +3,7 @@
 <!--author: Brian Jones-->
 <!--visible: true-->
 
-This is part 2 in a mini series about writing an interpreter in Go. The first post can be found here [here](https://blog.beeceej.com/blog/4).
+This is part 2 in a mini series about writing an interpreter in Go. The first post can be found [at blog.beeceej.com/blog/writing-a-go-interpreter-in-go](https://blog.beeceej.com/blog/writing-a-go-interpreter-in-go).
 
 As a quick recap, in part 1, I began parsing out snippets of go code into a data structure with regexes and evaluating them on the fly. I quickly realized regex weren't going to be a scalable solution (though it was fun to build them), the code wasn't as robust as it needed to be, and also i was unable to parse out what I needed at the lowest granularity. I knew the [go ast library](https://godoc.org/go/ast) existed, but I hadn't used it yet. This project is the perfect excuse to use it. And I'll tell ya, after a little while working with it, the library is wonderful. I'm not going to go into too much detail, if you want to see what the code looked like before you can reference the previous post, but here's what the regex looked like. nice and juicy.
 
