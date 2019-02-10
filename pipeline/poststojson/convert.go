@@ -13,13 +13,11 @@ import (
 )
 
 const (
-	indexVal             = 4
-	indexID              = 0
-	indexTitle           = 1
-	indexAuthor          = 2
-	indexPostedAtUnused  = 3 // If we remove these keys from the MD files the hashes will change unnecessarily
-	indexUpdatedAtUnused = 4 // If we remove these keys from the MD files the hashes will change unnecessarily
-	indexVisible         = 5
+	indexVal     = 4
+	indexID      = 0
+	indexTitle   = 1
+	indexAuthor  = 2
+	indexVisible = 3
 )
 
 var (
@@ -105,6 +103,7 @@ func (p *PostConverter) captureMeta(md string) (*post.Post, error) {
 		postedAt = time.Now().UTC()
 		updatedLast = time.Now().UTC()
 	} else if existingPost.MD5 != md5hash { // Only update it if the hash has changed
+		postedAt = existingPost.PostedAt
 		updatedLast = time.Now().UTC()
 	} else {
 		postedAt = existingPost.PostedAt
