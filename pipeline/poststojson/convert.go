@@ -58,7 +58,9 @@ func (p *PostConverter) toPost(md string) (post *post.Post) {
 		fmt.Println("Unable to capture meta data for", md)
 		panic(err.Error())
 	}
-	post.Body = removeCommentsRegex.ReplaceAllString(md, "")
+	cleanMD := removeCommentsRegex.ReplaceAllString(md, "")
+	post.Body = cleanMD
+	post.Blurb = cleanMD[0:100]
 	return post
 }
 
@@ -99,7 +101,7 @@ func (p *PostConverter) captureMeta(md string) (*post.Post, error) {
 		updatedLast time.Time
 	)
 
-	if existingPost == nil  { // If it's nil, it didn't exist before
+	if existingPost == nil { // If it's nil, it didn't exist before
 		postedAt = time.Now().UTC()
 		updatedLast = time.Now().UTC()
 	} else if existingPost.MD5 != md5hash { // Only update it if the hash has changed
