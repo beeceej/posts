@@ -75,6 +75,9 @@ func (u Uploader) UploadSiteMap(postIndex *post.PostIndex) error {
 		b []byte
 	)
 	var index *post.PostIndex
+	index = &post.PostIndex{
+		Posts: []post.Post{},
+	}
 	for _, p := range postIndex.Posts {
 		index.Posts = append(index.Posts, post.Post{
 			ID:              p.ID,
