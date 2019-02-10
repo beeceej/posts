@@ -58,7 +58,9 @@ func (p *PostConverter) toPost(md string) (post *post.Post) {
 		fmt.Println("Unable to capture meta data for", md)
 		panic(err.Error())
 	}
-	post.Body = removeCommentsRegex.ReplaceAllString(md, "")
+	cleanMD := removeCommentsRegex.ReplaceAllString(md, "")
+	post.Body = cleanMD
+	post.Blurb = cleanMD[0:100]
 	return post
 }
 

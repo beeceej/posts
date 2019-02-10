@@ -145,7 +145,12 @@ func (p *getSinglePost) tryGetPost(id, md5 string) func() error {
 		}
 
 		dynamodbattribute.UnmarshalMap(out.Item, &thePost)
-		p.post = &thePost
+		if &thePost == nil || thePost.ID == "" {
+			p.post = nil
+		} else {
+			p.post = &thePost
+		}
+
 		return nil
 	}
 }
