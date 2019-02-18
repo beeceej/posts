@@ -3,7 +3,7 @@
 <!--author: Brian Jones-->
 <!--visible: true-->
 
-I recently gave a talk at the Chicago Gopher's meet up about Go, the Serverless Framework, and Event Driven architecture. The slides for that talk can be found [@ docs.google.com/prsentation/d/e/2PACX-1vRzEMfp0S8ZyNwkRYC_YSfSvAULUfoU2dHFYJ_kjDnkFtJ80CH5bpffFIs6CUlMnE1-pS5_4HfoAFex/pub?start=false&loop=false&delayms=3000&slide=id.g3fa45d265d_1_5](https://docs.google.com/presentation/d/e/2PACX-1vRzEMfp0S8ZyNwkRYC_YSfSvAULUfoU2dHFYJ_kjDnkFtJ80CH5bpffFIs6CUlMnE1-pS5_4HfoAFex/pub?start=false&loop=false&delayms=3000&slide=id.g3fa45d265d_1_5) and code examples can be found on github [github.com/beeceej/sls-go-examples](https://github.com/beeceej/sls-go-examples). If you weren't able to see that talk, here's a quick synopsis of some of the highlights!
+I recently gave a talk at the Chicago Gopher's meet up about Go, the Serverless Framework, and Event Driven architecture. Here are [The slides for that talk](https://docs.google.com/presentation/d/e/2PACX-1vRzEMfp0S8ZyNwkRYC_YSfSvAULUfoU2dHFYJ_kjDnkFtJ80CH5bpffFIs6CUlMnE1-pS5_4HfoAFex/pub?start=false&loop=false&delayms=3000&slide=id.g3fa45d265d_1_5) the the code examples can be found on github at [github.com/beeceej/sls-go-examples](https://github.com/beeceej/sls-go-examples). If you weren't able to see that talk, here's a quick synopsis of some of the highlights!
 
 ## The Buzz And the Hype
 
