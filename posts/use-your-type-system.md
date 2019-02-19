@@ -21,7 +21,7 @@ All is fine until someone tries to instantiate a dog like
 new Dog("Long haired, brown", "Australian Shepherd");
 ```
 
-The above is just plain wrong, and it could have been prevented by making use of the type system however limiting it may be (Haskell people don't yell at me!!). A better piece of code will look like:
+The above is just plain wrong, and it could have been prevented by making use of the type system, however limiting it may be (Haskell people don't yell at me!!). A better piece of code will look like:
 
 ```java
 public class Dog {
@@ -69,3 +69,5 @@ Breed.isLarge.test(aBreed); // returns true or false.
 
 
 I'm writing java examples because everyone hates Java's type system... No one said it had to be pretty or elegant, but it gets the job done.
+
+Anyway... You can be expressive, safely create objects, and internalize functionality into your objects, which allows for easier to read and reason about code. That is a win for everyone!
