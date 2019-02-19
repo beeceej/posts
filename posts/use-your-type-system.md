@@ -10,7 +10,9 @@ Have you ever seen Java code with weakly typed parameters in its constructor? It
 public class Dog
 
   public Dog(String breed, String coatType) {
-    // Initialization Code here with potential validity checks, is the breed a valid breed, is the coat type even a coat type? did I mix the parameters up? etc...
+    // Initialization Code here with potential validity checks,
+    // is the breed a valid breed,
+    // is the coat type even a coat type? did I mix the parameters up? etc...
   }
 }
 ```
@@ -39,11 +41,10 @@ final Optional<Breed> maybeBreed = Breed.of("Australian Shepherd")
 final Optional<Coat> maybeCoat = Coat.of("Thick", "Brown", "Spotted")
 final BiFunction<Optional<Breed>, Optional<Coat>, Optional<Dog>> makeDog = (maybeBreed, maybeCoat) -> {
   return maybeBreed.flatMap(breed -> {
-    maybeCoat.flatMap(coat -> {
-      Optional.of(new Dog(breed, coat));
-    })
-  })
+    return maybeCoat.flatMap(coat -> Optional.of(new Dog(breed, coat)))
+  }).orElse(Optional.none)
 };
+
 final Optional<Dog> maybeDog = makeDog.apply(maybeBreed, maybeCoat);
 // Now go outside and play with the dog you just made!
 ```
@@ -53,7 +54,6 @@ With the above code, you can be sure that your dog was created, and because Bree
 
 ```java
 public class Breed {
-
   public final static Predicate<Breed> isLarge= breed -> {
     // However you determine a large breed of dog
   };
@@ -63,7 +63,6 @@ then in code it's easy to ask your object questions like:
 
 ```java
 final Breed aBreed;
-
 Breed.isLarge.test(aBreed); // returns true or false.
 ```
 
