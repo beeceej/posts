@@ -7,20 +7,21 @@ Have you ever seen Java code with weakly typed parameters in its constructor? It
 
 
 ```java
-public class Dog
+public class Dog {
 
-  public Dog(String breed, String coatType) {
-    // Initialization Code here with potential validity checks,
-    // is the breed a valid breed,
-    // is the coat type even a coat type? did I mix the parameters up? etc...
-  }
+    public Dog(String breed, String coatType) {
+      // Initialization Code here with potential validity checks,
+      // is the breed a valid breed,
+      // is the coat type even a coat type? did I mix the parameters up? etc...
+    }
+
 }
 ```
 
 All is fine until someone tries to instantiate a dog like
 
 ```java
-new Dog("Long haired, brown", "Australian Shepherd");
+  new Dog("Long haired, brown", "Australian Shepherd");
 ```
 
 The above is just plain wrong, and it could have been prevented by making use of the type system, however limiting it may be (Haskell people don't yell at me!!). A better piece of code will look like:
@@ -28,7 +29,8 @@ The above is just plain wrong, and it could have been prevented by making use of
 ```java
 public class Dog {
   public Dog(Breed breed, Coat coatType) {
-    // Initialization Code here with no initialization checks, to even get a Breed it must be built correctly, same with Coat
+    // Initialization Code here with no initialization checks,
+    // to even get a Breed it must be built correctly, same with Coat
   }
 }
 ```
@@ -50,7 +52,7 @@ final Optional<Dog> maybeDog = makeDog.apply(maybeBreed, maybeCoat);
 ```
 
 
-With the above code, you can be sure that your dog was created, and because Breed and Coat are **_using your type system_** you can be sure your dog wasn't created with cat features or something crazy like that, if it were, then you wouldn't have a value in your Optional. Note, if you wanted to know WHY creating your dog failed, you could swap out the `Optional's` with an Either type. Further, you could attach useful predicates to your Breed, and Coat class like this:
+With the above code, you can be sure that your dog was created, and because Breed and Coat are **_using your type system_** you can be sure your dog wasn't created with cat features or something crazy like that, if it were, then you wouldn't have a value in your Optional. Note, if you wanted to know WHY creating your dog failed, you could swap out the `Optional's` with an `Either` type. Further, you could attach useful predicates to your Breed, and Coat class like this:
 
 ```java
 public class Breed {
