@@ -23,7 +23,7 @@ workflows:
                 branches:
                   only:
                     - master
-    prod:
+      prod:
         jobs:
           - publish-pipeline:
               context: kickoff-blog-post-pipeline-prod
