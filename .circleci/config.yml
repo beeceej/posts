@@ -24,9 +24,10 @@ workflows:
                 only:
                   - master
     prod:
-      - publish-pipeline:
-          context: kickoff-blog-post-pipeline-prod
-          filters:
-            tags:
-              only:
-                - /publish:.*/
+      jobs:
+        - publish-pipeline:
+            context: kickoff-blog-post-pipeline-prod
+            filters:
+              tags:
+                only:
+                  - /publish:.*/
