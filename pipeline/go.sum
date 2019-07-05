@@ -6,6 +6,7 @@ github.com/aws/aws-sdk-go-v2 v0.7.0 h1:a5xRI/tBmUFKuAA0SOyEY2P1YhQb+jVOEI9P/7Kfr
 github.com/aws/aws-sdk-go-v2 v0.7.0/go.mod h1:17MaCZ9g0q5BIMxwzRQeiv8M3c8+W7iuBnlWAEprcxE=
 github.com/beeceej/inflight v1.0.0 h1:ZCdzaYA0ta8u8YiCYFuGa4+XaCqmtoiA2N0OssPKa2g=
 github.com/beeceej/inflight v1.0.0/go.mod h1:1YmTzFfq4VHNB8myF1EuWBC4jC4op8DPbvbqDIetwao=
+github.com/beeceej/posts v0.0.0-20190222001918-ec54c533e547 h1:Tt1LB9/7mwF61XffhxhDryUJB2VWnjdE/YTnnjwfcBs=
 github.com/cenkalti/backoff v2.1.1+incompatible h1:tKJnvO2kl0zmb/jA5UKAt4VoEVw1qxKWjE/Bpp46npY=
 github.com/cenkalti/backoff v2.1.1+incompatible/go.mod h1:90ReRw6GdpyfrHakVjL/QHaoyV4aDUVVkXQJJJ3NXXM=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

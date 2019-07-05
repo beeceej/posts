@@ -1,13 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket = "beeceej-ops"
-    region = "us-east-1"
-  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-}
 
 locals {
   state_machine_name = "blog-post-pipeline"
@@ -16,7 +6,7 @@ locals {
 data "template_file" "state_machine_definition" {
   template = "${file("${path.module}/state.json")}"
 
-  vars {
+  vars = {
     convert_posts_to_json  = "${module.convert_posts_to_json.lambda_arn}"
     save_posts             = "${module.save_posts.lambda_arn}"
     upload_unchanged_posts = "${module.upload_unchanged_posts.lambda_arn}"
@@ -76,7 +66,7 @@ resource "aws_sfn_state_machine" "state_machine" {
 }
 
 resource "aws_s3_bucket" "inflight_bucket" {
-  bucket = "beeceej-pipelines"
+  bucket = "${var.pipeline_bucket_name}"
 }
 
 output "state_machine_id" {

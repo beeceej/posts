@@ -56,7 +56,7 @@ resource "aws_lambda_function" "state_machine_lambda" {
   role             = "${aws_iam_role.lambda_iam_role.arn}"
   handler          = "${var.handler}"
   filename         = "${var.file_name}"
-  source_code_hash = "${base64sha256(file(var.file_name))}"
+  source_code_hash = "${filesha256(var.file_name)}"
   runtime          = "go1.x"
   memory_size      = "${var.memory_size}"
   timeout          = "${var.timeout}"
