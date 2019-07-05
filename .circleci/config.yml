@@ -15,18 +15,18 @@ jobs:
 workflows:
   version: 2
   deploy:
-    jobs:
-      - dev-publish-pipeline:
-          context: kickoff-blog-post-pipeline
-          filters:
-            branches:
-              only:
-                - master
+    dev:
+      jobs:
+        - dev-publish-pipeline:
+            context: kickoff-blog-post-pipeline
+            filters:
+              branches:
+                only:
+                  - master
+    prod:
       - publish-pipeline:
           context: kickoff-blog-post-pipeline-prod
           filters:
             tags:
               only:
                 - /publish:.*/
-            branches:
-              ignore: .*
