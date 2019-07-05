@@ -1,24 +1,30 @@
 version: 2
 jobs:
-  dev-pipeline:
+  dev-publish-pipeline:
     docker:
       - image: mesosphere/aws-cli
     steps:
       - checkout
       - run: aws stepfunctions start-execution --state-machine-arn  arn:aws:states:us-east-1:782123507683:stateMachine:blog-post-pipeline
+  publish-pipeline:
+      docker:
+        - image: mesosphere/aws-cli
+      steps:
+        - checkout
+        - run: aws stepfunctions start-execution --state-machine-arn  arn:aws:states:us-east-1:448673940787:stateMachine:blog-post-pipeline
 workflows:
   version: 2
   deploy:
     jobs:
-      - dev-pipeline
-        context: kickoff-blog-post-pipeline-dev
-        filters:
-          branches:
-            only:
-              - master
-      - publish-pipeline
-        context: kickoff-blog-post-pipeline
-        filters:
-          tags:
-            only:
-              - /publish:.*/
+      - dev-publish-pipeline:
+          context: kickoff-blog-post-pipeline-dev
+          filters:
+            branches:
+              only:
+                - master
+      - publish-pipeline:
+          context: kickoff-blog-post-pipeline
+          filters:
+            tags:
+              only:
+                - /publish:.*/
