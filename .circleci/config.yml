@@ -17,13 +17,13 @@ workflows:
   deploy:
     jobs:
       - dev-publish-pipeline:
-          context: kickoff-blog-post-pipeline-dev
+          context: kickoff-blog-post-pipeline
           filters:
             branches:
               only:
-                - master
+                -
       - publish-pipeline:
-          context: kickoff-blog-post-pipeline
+          context: kickoff-blog-post-pipeline-prod
           filters:
             tags:
               only:
