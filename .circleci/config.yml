@@ -14,20 +14,19 @@ jobs:
         - run: aws stepfunctions start-execution --state-machine-arn  arn:aws:states:us-east-1:448673940787:stateMachine:blog-post-pipeline
 workflows:
   version: 2
-  deploy:
-      dev:
-        jobs:
-          - dev-publish-pipeline:
-              context: kickoff-blog-post-pipeline
-              filters:
-                branches:
-                  only:
-                    - master
-      prod:
-        jobs:
-          - publish-pipeline:
-              context: kickoff-blog-post-pipeline-prod
-              filters:
-                tags:
-                  only:
-                    - /publish:.*/
+  dev:
+    jobs:
+      - dev-publish-pipeline:
+          context: kickoff-blog-post-pipeline
+          filters:
+            branches:
+              only:
+                - master
+  prod:
+    jobs:
+      - publish-pipeline:
+          context: kickoff-blog-post-pipeline-prod
+          filters:
+            tags:
+              only:
+                - /publish:.*/
