@@ -21,10 +21,12 @@ workflows:
           filters:
             branches:
               only:
-                -
+                - master
       - publish-pipeline:
           context: kickoff-blog-post-pipeline-prod
           filters:
             tags:
               only:
                 - /publish:.*/
+          branches:
+            ignore: .*
