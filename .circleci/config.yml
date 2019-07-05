@@ -28,5 +28,3 @@ workflows:
             tags:
               only:
                 - /publish:.*/
-          branches:
-            ignore: .*
