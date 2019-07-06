@@ -4,7 +4,6 @@ provider "aws" {
 
 provider "cloudflare" {
   email = "jonesbrianc26@gmail.com"
-  token = "${var.cloudflare_token}"
 }
 
 terraform {
