@@ -1,7 +1,7 @@
 locals {
-  name = "kickoff_blog_post_pipeline"
+  name                 = "kickoff_blog_post_pipeline"
   pipeline_bucket_name = "prod-beeceej-pipelines"
-  static_bucket_name = "posts-prod.beeceej.com"
+  static_bucket_name   = "posts-prod.beeceej.com"
 }
 
 module "pipeline" {
