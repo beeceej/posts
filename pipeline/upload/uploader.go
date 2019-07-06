@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -27,7 +28,7 @@ func (u Uploader) Upload(postIndex *post.PostIndex) error {
 	for _, p := range postIndex.Posts {
 		getObjReq := u.S3API.GetObjectRequest(
 			&s3.GetObjectInput{
-				Bucket: aws.String("static.beeceej.com"),
+				Bucket: aws.String(os.Getenv("STATIC_BUCKET_NAME")),
 				Key:    aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
 			},
 		)
@@ -49,7 +50,7 @@ func (u Uploader) Upload(postIndex *post.PostIndex) error {
 		if postPublishedBefore && hasMD5Changed {
 			fmt.Println("existingPublishedPost.MD5", existingPublishedPost.MD5, " post.MD5", p.MD5)
 			putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
-				Bucket:      aws.String("static.beeceej.com"),
+				Bucket:      aws.String(os.Getenv("STATIC_BUCKET_NAME")),
 				Key:         aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
 				Body:        bytes.NewReader(p.ToBytes()),
 				ContentType: aws.String("application/json"),
@@ -57,7 +58,7 @@ func (u Uploader) Upload(postIndex *post.PostIndex) error {
 			putObjReq.Send()
 		} else {
 			putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
-				Bucket:      aws.String("static.beeceej.com"),
+				Bucket:      aws.String(os.Getenv("STATIC_BUCKET_NAME")),
 				Key:         aws.String(filepath.Join("posts", p.NormalizedTitle) + ".json"),
 				Body:        bytes.NewReader(p.ToBytes()),
 				ContentType: aws.String("application/json"),
@@ -94,7 +95,7 @@ func (u Uploader) UploadSiteMap(postIndex *post.PostIndex) error {
 
 	b, _ = json.Marshal(index)
 	putObjReq := u.PutObjectRequest(&s3.PutObjectInput{
-		Bucket:      aws.String("static.beeceej.com"),
+		Bucket:      aws.String(os.Getenv("STATIC_BUCKET_NAME")),
 		Key:         aws.String("posts/all.json"),
 		Body:        bytes.NewReader(b),
 		ContentType: aws.String("application/json"),

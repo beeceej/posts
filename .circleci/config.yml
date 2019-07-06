@@ -30,6 +30,7 @@ jobs:
           mkdir bin
           cp /tmp/workspace/*.zip bin
           export TF_VAR_account_id=$AWS_ACCOUNT_ID
+          export CLOUDFLARE_TOKEN=$CLOUDFLARE_TOKEN
           env=${DEPLOY_ENV:-dev}
           if [ "$env" == "dev" ]; then
             cd deployment/dev
@@ -49,6 +50,7 @@ jobs:
           mkdir bin
           cp /tmp/workspace/*.zip bin
           export TF_VAR_account_id=$AWS_ACCOUNT_ID
+          export CLOUDFLARE_TOKEN=$CLOUDFLARE_TOKEN
           env=${DEPLOY_ENV:-dev}
           if [ "$env" == "prod" ]; then
             cd deployment/prod
@@ -68,6 +70,7 @@ jobs:
           mkdir bin
           cp /tmp/workspace/*.zip bin
           export TF_VAR_account_id=$AWS_ACCOUNT_ID
+          export CLOUDFLARE_TOKEN=$CLOUDFLARE_TOKEN
           env=${DEPLOY_ENV:-dev}
           if [ "$env" == "dev" ]; then
             cd deployment/dev
@@ -86,6 +89,7 @@ jobs:
           mkdir bin
           cp /tmp/workspace/*.zip bin
           export TF_VAR_account_id=$AWS_ACCOUNT_ID
+          export CLOUDFLARE_TOKEN=$CLOUDFLARE_TOKEN
           env=${DEPLOY_ENV:-dev}
           if [ "$env" == "prod" ]; then
             cd deployment/prod
