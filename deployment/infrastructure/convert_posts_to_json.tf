@@ -21,7 +21,7 @@ data aws_iam_policy_document "convert_posts_to_json" {
       "dynamodb:GetRecords",
     ]
 
-    resources = ["arn:aws:dynamodb:us-east-1:850054059454:table/blog-posts"]
+    resources = ["arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/blog-posts"]
   }
 }
 
