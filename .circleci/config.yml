@@ -54,6 +54,8 @@ workflows:
             tags:
               only:
                 - /publish:.*/
+            branches:
+              ignore: /.*/
       - run-publish-pipeline:
           context: kickoff-blog-post-pipeline-prod
           filters:
