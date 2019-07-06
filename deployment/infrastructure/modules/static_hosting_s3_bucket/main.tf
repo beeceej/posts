@@ -8,6 +8,5 @@ resource "aws_s3_bucket" "static" {
 
   website {
     index_document = "index.html"
-
   }
 }

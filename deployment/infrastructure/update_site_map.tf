@@ -3,10 +3,10 @@ data aws_iam_policy_document "update_site_map" {
     actions = ["s3:*"]
 
     resources = [
-      "arn:aws:s3:::${var.static_bucket_name}.com/*",
-      "arn:aws:s3:::${var.static_bucket_name}.com",
-      "arn:aws:s3:::beeceej-pipelines/*",
-      "arn:aws:s3:::beeceej-pipelines"
+      "arn:aws:s3:::${var.static_bucket_name}/*",
+      "arn:aws:s3:::${var.static_bucket_name}",
+      "arn:aws:s3:::${var.pipeline_bucket_name}/*",
+      "arn:aws:s3:::${var.pipeline_bucket_name}"
     ]
   }
 }
@@ -22,7 +22,7 @@ module "update_site_map" {
   function_name = "${local.state_machine_name}-update_site_map"
   handler       = "/bin/update_site_map"
   file_name     = "../../bin/update_site_map.zip"
-  memory_size   = "512"
+  memory_size   = "128"
   timeout       = "60"
 
   environment_vars = {
