@@ -1,4 +1,4 @@
-data aws_iam_policy_document "cross_post_medium" {
+/*data aws_iam_policy_document "cross_post_medium" {
   statement {
     actions = ["s3:*"]
     effect  = "Allow"
@@ -33,3 +33,4 @@ module "cross_post_medium" {
 data "aws_ssm_parameter" "medium_integration_token" {
   name = "/medium/beeceej.code/integration_token"
 }
+*/
