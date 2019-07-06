@@ -128,12 +128,22 @@ workflows:
             - build-and-persist-artifacts
   deploy:
     jobs:
+      - build-and-persist-artifacts:
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              only:
+                - /publish:.*/
       - apply-terraform-dev:
           context: terraformx-dev
           filters:
             branches:
               only:
                 - master
+          requires:
+            - build-and-persist-artifacts
       - run-publish-pipeline-dev:
           context: kickoff-blog-post-pipeline-dev
           filters:
@@ -142,6 +152,7 @@ workflows:
                 - master
           requires:
             - apply-terraform-dev
+            - build-and-persist-artifacts
       - test-terraform-plan-prod:
           context: terraformx-prod
           filters:
@@ -150,6 +161,8 @@ workflows:
                 - /publish:.*/
             branches:
               ignore: /.*/
+          requires:
+            - build-and-persist-artifacts
       - apply-terraform-prod:
           context: terraformx-prod
           filters:
@@ -160,6 +173,7 @@ workflows:
               ignore: /.*/
           requires:
             - test-terraform-plan-prod
+            - build-and-persist-artifacts
       - run-publish-pipeline-prod:
           context: kickoff-blog-post-pipeline-prod
           filters:
