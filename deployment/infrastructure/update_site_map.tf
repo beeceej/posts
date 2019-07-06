@@ -29,6 +29,6 @@ module "update_site_map" {
     "STATIC_BUCKET_NAME"   = "${var.static_bucket_name}"
     "INFLIGHT_BUCKET_NAME" = "${var.pipeline_bucket_name}"
     "PIPELINE_SUB_PATH"    = "${local.pipeline_sub_path}"
-    "POSTS_REPO_URI"       = "${var.posts_repo_uri}"
+    "POSTS_REPO_URI"       = "${local.posts_repo_uri}"
   }
 }
