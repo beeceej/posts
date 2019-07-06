@@ -10,7 +10,7 @@ data "template_file" "state_machine_definition" {
     convert_posts_to_json  = "${module.convert_posts_to_json.lambda_arn}"
     save_posts             = "${module.save_posts.lambda_arn}"
     upload_unchanged_posts = "${module.upload_unchanged_posts.lambda_arn}"
-    update_site_map = "${module.update_site_map.lambda_arn}"
+    update_site_map        = "${module.update_site_map.lambda_arn}"
   }
 }
 

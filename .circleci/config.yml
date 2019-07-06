@@ -1,30 +1,61 @@
 version: 2
 jobs:
-  dev-publish-pipeline:
+  terraform:
+    docker:
+      - image: hashicorp/terraform:0.12.3
+    steps:
+      - checkout
+      - run: |
+          export TF_VAR_account_id=$AWS_ACCOUNT_ID
+          env=${DEPLOY_ENV:-dev}
+          if [ "$env" == "dev" ]; then
+            cd deployment/dev
+            terraform init
+            terraform apply
+            exit "$?"
+          fi
+          if [ "$env" == "prod" ]; then
+            cd deployment/prod
+            terraform init
+            terraform apply
+            exit "$?"
+          fi
+  publish-pipeline:
     docker:
       - image: mesosphere/aws-cli
     steps:
       - checkout
-      - run: aws stepfunctions start-execution --state-machine-arn  arn:aws:states:us-east-1:782123507683:stateMachine:blog-post-pipeline
-  publish-pipeline:
-      docker:
-        - image: mesosphere/aws-cli
-      steps:
-        - checkout
-        - run: aws stepfunctions start-execution --state-machine-arn  arn:aws:states:us-east-1:448673940787:stateMachine:blog-post-pipeline
+      - run: |
+          export state_machine_arn="arn:aws:states:us-east-1:${AWS_ACCOUNT_ID}:stateMachine:blog-post-pipeline"
+          aws stepfunctions start-execution --state-machine-arn  "$state_machine_arn"
 workflows:
   version: 2
   dev:
     jobs:
-      - dev-publish-pipeline:
-          context: kickoff-blog-post-pipeline
+      - terraform:
+          context: terraformx-dev
+          filters:
+            branches:
+              only:
+                - master
+      - run-publish-pipeline:
+          context: kickoff-blog-post-pipeline-dev
           filters:
             branches:
               only:
                 - master
   prod:
     jobs:
-      - publish-pipeline:
+      - terraform:
+          context: terraformx-prod
+          filters:
+            tags:
+              only:
+                - /publish:.*/
+            branches:
+              only:
+                - master
+      - run-publish-pipeline:
           context: kickoff-blog-post-pipeline-prod
           filters:
             tags:
