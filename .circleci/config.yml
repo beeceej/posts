@@ -72,7 +72,7 @@ jobs:
           if [ "$env" == "dev" ]; then
             cd deployment/dev
             terraform init
-            terraform apply
+            terraform apply -auto-aprove
             exit "$?"
           fi
   apply-terraform-prod:
@@ -90,7 +90,7 @@ jobs:
           if [ "$env" == "prod" ]; then
             cd deployment/prod
             terraform init
-            terraform apply
+            terraform apply -auto-aprove
             exit "$?"
           fi
   run-publish-pipeline-dev:
