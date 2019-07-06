@@ -3,8 +3,9 @@ data aws_iam_policy_document "convert_posts_to_json" {
     actions = ["s3:*"]
     effect  = "Allow"
 
-    resources = ["arn:aws:s3:::beeceej-pipelines/*",
-      "arn:aws:s3:::static.beeceej.com/*",
+    resources = [
+      "arn:aws:s3:::${var.pipeline_bucket_name}/*",
+      "arn:aws:s3:::${var.static_bucket_name}/*",
     ]
   }
 
@@ -21,7 +22,9 @@ data aws_iam_policy_document "convert_posts_to_json" {
       "dynamodb:GetRecords",
     ]
 
-    resources = ["arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/blog-posts"]
+    resources = [
+      "${module.posts-dynamodb-table.arn}"
+    ]
   }
 }
 
@@ -36,14 +39,14 @@ module "convert_posts_to_json" {
   function_name = "${local.state_machine_name}-convert_posts_to_json"
   handler       = "/bin/convert_posts_to_json"
   file_name     = "../../bin/convert_posts_to_json.zip"
-  memory_size   = "512"
+  memory_size   = "128"
   timeout       = "60"
 
   environment_vars = {
-    "BUCKET_NAME"          = "static.beeceej.com"
-    "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
-    "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
-    "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
+    "STATIC_BUCKET_NAME"   = "${var.static_bucket_name}"
+    "INFLIGHT_BUCKET_NAME" = "${var.pipeline_bucket_name}"
+    "PIPELINE_SUB_PATH"    = "${local.pipeline_sub_path}"
+    "POSTS_REPO_URI"       = "${var.posts_repo_uri}"
     "POSTS_TABLE_NAME"     = "${local.table_name}"
   }
 }

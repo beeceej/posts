@@ -8,8 +8,9 @@ data aws_iam_policy_document "save_posts" {
   statement {
     actions = ["s3:*"]
 
-    resources = ["arn:aws:s3:::static.beeceej.com/*",
-      "arn:aws:s3:::beeceej-pipelines/*",
+    resources = [
+      "arn:aws:s3:::${var.static_bucket_name}/*",
+      "arn:aws:s3:::${var.pipeline_bucket_name}/*",
     ]
   }
 }
@@ -25,15 +26,14 @@ module "save_posts" {
   function_name = "${local.state_machine_name}-save_posts"
   handler       = "/bin/save_posts"
   file_name     = "../../bin/save_posts.zip"
-  memory_size   = "512"
+  memory_size   = "128"
   timeout       = "60"
 
   environment_vars = {
-    "BUCKET_NAME"          = "static.beeceej.com"
-    "POSTS_REPO_URL"       = "https://github.com/beeceej/posts"
-    "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
-    "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
-    "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
+    "STATIC_BUCKET_NAME"   = "${var.static_bucket_name}"
+    "INFLIGHT_BUCKET_NAME" = "${var.pipeline_bucket_name}"
+    "PIPELINE_SUB_PATH"    = "${local.pipeline_sub_path}"
+    "POSTS_REPO_URI"       = "${var.posts_repo_uri}"
     "POSTS_TABLE_NAME"     = "${local.table_name}"
   }
 }
