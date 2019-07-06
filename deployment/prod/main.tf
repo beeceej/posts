@@ -8,7 +8,6 @@ module "pipeline" {
   source               = "../infrastructure"
   pipeline_bucket_name = "${local.pipeline_bucket_name}"
   static_bucket_name   = "${local.static_bucket_name}"
-  account_id           = "${var.account_id}"
 }
 
 resource "aws_iam_user" "pipeline_kickoff" {

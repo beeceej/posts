@@ -44,6 +44,8 @@ workflows:
             branches:
               only:
                 - master
+          requires:
+            - terraform
   prod:
     jobs:
       - terraform:
@@ -53,8 +55,7 @@ workflows:
               only:
                 - /publish:.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
       - run-publish-pipeline:
           context: kickoff-blog-post-pipeline-prod
           filters:
@@ -62,5 +63,6 @@ workflows:
               only:
                 - /publish:.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
+          requires:
+            - terraform
