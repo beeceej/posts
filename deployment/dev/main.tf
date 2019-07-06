@@ -27,7 +27,7 @@ resource "aws_iam_user_policy" "pipeline_kickoff" {
         "stateMachine:StartExecution*"
       ],
       "Effect": "Allow",
-      "Resource": "${module.pipeline.state_machine_id}"
+      "Resource": "${module.pipeline.state_machine_id}*"
     }
   ]
 }
