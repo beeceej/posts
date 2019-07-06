@@ -3,10 +3,10 @@ data aws_iam_policy_document "upload_unchanged_posts" {
     actions = ["s3:*"]
 
     resources = [
-      "arn:aws:s3:::static.beeceej.com/*",
-      "arn:aws:s3:::static.beeceej.com",
-      "arn:aws:s3:::beeceej-pipelines/*",
-      "arn:aws:s3:::beeceej-pipelines"
+      "arn:aws:s3:::${var.pipeline_bucket_name}/*",
+      "arn:aws:s3:::${var.pipeline_bucket_name}",
+      "arn:aws:s3:::${var.static_bucket_name}/*",
+      "arn:aws:s3:::${var.static_bucket_name}"
     ]
   }
 }
@@ -22,14 +22,13 @@ module "upload_unchanged_posts" {
   function_name = "${local.state_machine_name}-upload_unchanged_posts"
   handler       = "/bin/upload_unchanged_posts"
   file_name     = "../../bin/upload_unchanged_posts.zip"
-  memory_size   = "512"
+  memory_size   = "128"
   timeout       = "60"
 
   environment_vars = {
-    "BUCKET_NAME"          = "static.beeceej.com"
-    "POSTS_REPO_URL"       = "https://github.com/beeceej/posts"
-    "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
-    "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
-    "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
+    "STATIC_BUCKET_NAME"   = "${var.static_bucket_name}"
+    "INFLIGHT_BUCKET_NAME" = "${var.pipeline_bucket_name}"
+    "PIPELINE_SUB_PATH"    = "${local.pipeline_sub_path}"
+    "POSTS_REPO_URI"       = "${local.posts_repo_uri}"
   }
 }

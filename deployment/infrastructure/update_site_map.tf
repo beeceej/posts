@@ -3,8 +3,8 @@ data aws_iam_policy_document "update_site_map" {
     actions = ["s3:*"]
 
     resources = [
-      "arn:aws:s3:::static.beeceej.com/*",
-      "arn:aws:s3:::static.beeceej.com",
+      "arn:aws:s3:::${var.static_bucket_name}.com/*",
+      "arn:aws:s3:::${var.static_bucket_name}.com",
       "arn:aws:s3:::beeceej-pipelines/*",
       "arn:aws:s3:::beeceej-pipelines"
     ]
@@ -26,10 +26,9 @@ module "update_site_map" {
   timeout       = "60"
 
   environment_vars = {
-    "BUCKET_NAME"          = "static.beeceej.com"
-    "POSTS_REPO_URL"       = "https://github.com/beeceej/posts"
-    "INFLIGHT_BUCKET_NAME" = "beeceej-pipelines"
-    "PIPELINE_SUB_PATH"    = "blog-post-pipeline"
-    "POSTS_REPO_URI"       = "https://github.com/beeceej/posts"
+    "STATIC_BUCKET_NAME"   = "${var.static_bucket_name}"
+    "INFLIGHT_BUCKET_NAME" = "${var.pipeline_bucket_name}"
+    "PIPELINE_SUB_PATH"    = "${local.pipeline_sub_path}"
+    "POSTS_REPO_URI"       = "${var.posts_repo_uri}"
   }
 }
